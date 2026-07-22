@@ -28,7 +28,11 @@ function App() {
 
   function handleCompleteTodo(index) {
     //Update/edit/modift (CRUD)
-    let newTodoList = [];
+    let newTodoList = [...todos]; //Dupe array
+    let completedTodo = todos[index]; //complete todo
+    completedTodo['complete'] = true; //Modify stat of completed todo
+    newTodoList[index] = completedTodo; //Changed todo in dupe array
+    setTodos(newTodoList); //Set dupe array as actual array
   }
 
   function handleDeleteTodo(index) {
@@ -42,7 +46,7 @@ function App() {
     <>
       <Header todos={todos}/>
       <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} todos={todos}/>
-      <TodoList handleDeleteTodo={handleDeleteTodo} selectedTab={selectedTab} todos={todos}/>
+      <TodoList handleCompleteTodo={handleCompleteTodo} handleDeleteTodo={handleDeleteTodo} selectedTab={selectedTab} todos={todos}/>
       <TodoInput handleAddTodo={handleAddTodo} />
     </>
   )
