@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState } from "react"; //Tracks events
+import { useEffect } from "react";
+
 import { Header } from "./components/Header";
 import { Tabs } from "./components/Tabs";
 import { TodoInput } from "./components/TodoInput";
@@ -24,6 +26,7 @@ function App() {
   function handleAddTodo(newTodo) {
     const newTodoList = [...todos, {input:newTodo, complete: false}];
     setTodos(newTodoList);
+    handleSaveData(newTodoList);
   }
 
   function handleCompleteTodo(index) {
@@ -33,6 +36,7 @@ function App() {
     completedTodo['complete'] = true; //Modify stat of completed todo
     newTodoList[index] = completedTodo; //Changed todo in dupe array
     setTodos(newTodoList); //Set dupe array as actual array
+    handleSaveData(newTodoList);
   }
 
   function handleDeleteTodo(index) {
@@ -40,7 +44,18 @@ function App() {
       return valIndex !== index;
     });
     setTodos(newTodoList);
+    handleSaveData(newTodoList);
   }
+
+  function handleSaveData(currTodos) {
+    localStorage.setItem('todo-app', JSON.stringify({todos: currTodos}));
+  }
+
+  useEffect(() => {
+    if (!localStorage || !localStorage.getItem('todo-app')) {return}
+    let db = JSON.parse(localStorage.getItem('todo-app'));
+    setTodos(db.todos);
+  },[]) //Blank array means when page is available
 
   return (
     <>
